@@ -3,8 +3,8 @@ import itertools
 
 from pyzz import *
 
-from utils import fold_fairness_constraints
-from liveness_to_safety import extract_liveness_as_safety
+from .utils import fold_fairness_constraints
+from .liveness_to_safety import extract_liveness_as_safety
 
 def compute_stabilizing_constraints(N, candidates, fg_prop, k=0, conflict_limit=None):
 
@@ -22,7 +22,7 @@ def compute_stabilizing_constraints(N, candidates, fg_prop, k=0, conflict_limit=
 
     def add_stabilizing(x):
         stabilizing_constraints.add(x)
-        for i in xrange(k+1):
+        for i in range(k+1):
             S.equivalence(U[x, k], U[x, k+1])
 
     def implies_prop(x):
@@ -30,9 +30,9 @@ def compute_stabilizing_constraints(N, candidates, fg_prop, k=0, conflict_limit=
 
     def add_polarity(x):
         polarity_constraints.add(x)
-        S.cube( U[x,i] for i in xrange(k+2) )
+        S.cube( U[x,i] for i in range(k+2) )
 
-    for i in xrange(k+2):
+    for i in range(k+2):
         S.cube( U[N.get_constraints(), i] )
 
     stabilizing_constraints = set()

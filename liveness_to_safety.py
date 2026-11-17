@@ -2,7 +2,7 @@ import itertools
 
 from pyzz import *
 
-from utils import fold_fairness_constraints
+from .utils import fold_fairness_constraints
 
 def liveness_to_safety(N, new_fg=None):
 
@@ -14,7 +14,7 @@ def liveness_to_safety(N, new_fg=None):
 
     bad = []
 
-    for i in xrange(N.n_fair_properties()):
+    for i in range(N.n_fair_properties()):
 
         all_fcs = [ fc[0]^fc.sign() for fc in all_fcs_for_fair_po(N, 0) ]
         fair = conjunction(N, (somepast(N, fc&loop_start)[1] for fc in all_fcs))
@@ -46,7 +46,7 @@ if __name__=="__main__":
 
     N = netlist()
 
-    ffs = [ N.add_Flop() for _ in xrange(10) ]
+    ffs = [ N.add_Flop() for _ in range(10) ]
 
     for i, ff in enumerate(ffs):
         N.flop_init[ff] = solver.l_True if i==0 else solver.l_False
@@ -55,7 +55,7 @@ if __name__=="__main__":
     po = N.add_PO(fanin=ffs[-1])
     N.add_property(~po)
 
-    print "BMC(safe):\n"
+    print("BMC(safe):\n")
     bmc.safety_bmc(N, 50)
 
     N.add_fair_property([po])
@@ -64,8 +64,8 @@ if __name__=="__main__":
     M, xlat, loop_start = extract_liveness_as_safety(N)
 
     symbols= { "_LIVENESS_LOOP_START":loop_start }
-    symbols.update( (n,xlat[s]) for n,s in orig_symbols.iteritems() if s in xlat )
+    symbols.update( (n,xlat[s]) for n,s in orig_symbols.items() if s in xlat )
 
-    print
-    print "BMC(live):\n"
+    print()
+    print("BMC(live):\n")
     bmc.safety_bmc(M, 50, symbols)
